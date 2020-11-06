@@ -5,3 +5,4 @@ dist
 
 git.txt
 npm.txt
+package-lock.json

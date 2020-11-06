@@ -1,21 +1,48 @@
 const path = require('path');
-
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
-const isDev = !isProd;
+const isDev = process.env.NODE_ENV === 'development';
 
+const filename = ext => isDev ? `[name].bundle.${ext}` : `[name].[hash:7].bundle.${ext}`;
+const getStyleLoaders = () => [isProd ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'];
+const getJsLoaders = () =>{
+    const loaders = [
+        {
+            loader: 'babel-loader',
+            options: {
+                presets: [[
+                    "@babel/env", {
+                        "corejs": 3,
+                        "useBuiltIns": "usage",
+                        "debug": false,
+                        "modules": false,
+                        "targets": "last 1 version, >1%"
+                    }],
+                    "@babel/react"
+                ]
+            }
+        }
+    ];
+    if(isDev){
+        loaders.push('eslint-loader');
+    }
 
+    return loaders;
+}
+console.log('MODE:', process.env.NODE_ENV);
+console.log('PORT:', process.env.PORT);
 
 module.exports = {
-    context: path.resolve(__dirname, 'src'),
     mode: 'development',
-    entry: './index.js',
+    entry: {
+        main: './src/index.js'
+    },
     output: {
-        filename: 'bundle.[hash].js',
+        filename: filename('js'),
         path: path.resolve(__dirname, 'dist')
     },
     resolve: {
@@ -25,10 +52,17 @@ module.exports = {
             '@core': path.resolve(__dirname, 'src/core'),
         }
     },
+    devtool: isDev ? 'source-map' : false,
+    devServer: {
+        port: process.env.PORT,
+        overlay: true,
+        open: true,
+        hot: true
+    },
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            template: "index.html",
+            template: path.resolve(__dirname, 'src/index.html'),
             minify: {
                 collapseWhitespace: isProd,
                 removeComments: isProd,
@@ -43,27 +77,60 @@ module.exports = {
             ],
         }),
         new MiniCssExtractPlugin({
-            filename: 'bundle.[hash].css'
+            filename: filename('css'),
         })
     ],
     module: {
         rules: [
             {
+                test: /\.css$/i,
+                use: getStyleLoaders(),
+            },
+            {
                 test: /\.s[ac]ss$/i,
+                use: [...getStyleLoaders(), 'sass-loader'],
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg|ico)$/i,
                 use: [
-                    MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader',
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            outputPath: 'images',
+                            name: '[name]-[sha1:hash:7].[ext]'
+                        }
+                    },
                 ],
             },
             {
-                test: /\.m?js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    }
-                }
+                test: /\.svg$/i,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            outputPath: 'svg',
+                            name: '[name]-[sha1:hash:7].[ext]'
+                        }
+                    },
+                ],
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            outputPath: 'fonts',
+                            name: '[name].[ext]'
+                        }
+                    }]
+            },
+            {
+                test: /\.(m?js|jsx)$/,
+                exclude: /(node_modules|bower_components)/,
+                use: getJsLoaders()
             }
-        ],
-    },
-};
+        ]
+    }
+
+}
