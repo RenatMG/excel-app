@@ -6,5 +6,13 @@ parserOptions:
   ecmaVersion: 2020
   sourceType: module
 rules: {
-  linebreak-style: off
+  linebreak-style: off,
+  object-curly-spacing: off,
+  import/no-unresolved: off,
+  import/prefer-default-export: off,
+  indent: off,
+  class-methods-use-this: off,
+  no-plusplus: ["error", { allowForLoopAfterthoughts: true }],
+  no-tabs: off
 }
+parser: "babel-eslint"

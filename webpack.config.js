@@ -7,27 +7,30 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
 
-const filename = ext => isDev ? `[name].bundle.${ext}` : `[name].[hash:7].bundle.${ext}`;
+const filename = (ext) => (isDev ? `[name].bundle.${ext}` : `[name].[hash:7].bundle.${ext}`);
 const getStyleLoaders = () => [isProd ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'];
-const getJsLoaders = () =>{
+const getJsLoaders = () => {
     const loaders = [
         {
             loader: 'babel-loader',
             options: {
                 presets: [[
-                    "@babel/env", {
-                        "corejs": 3,
-                        "useBuiltIns": "usage",
-                        "debug": false,
-                        "modules": false,
-                        "targets": "last 1 version, >1%"
+                    '@babel/env', {
+                        corejs: 3,
+                        useBuiltIns: 'usage',
+                        debug: false,
+                        modules: false,
+                        targets: 'last 1 version, >1%',
                     }],
-                    "@babel/react"
-                ]
-            }
-        }
+                    '@babel/react',
+                ],
+                plugins: [
+                    '@babel/plugin-proposal-class-properties',
+                ],
+            },
+        },
     ];
-    if(isDev){
+    if (isDev) {
         loaders.push('eslint-loader');
     }
 
@@ -39,25 +42,25 @@ console.log('PORT:', process.env.PORT);
 module.exports = {
     mode: 'development',
     entry: {
-        main: './src/index.js'
+        main: './src/index.js',
     },
     output: {
         filename: filename('js'),
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist'),
     },
     resolve: {
         extensions: ['.js'],
         alias: {
             '@': path.resolve(__dirname, 'src'),
             '@core': path.resolve(__dirname, 'src/core'),
-        }
+        },
     },
     devtool: isDev ? 'source-map' : false,
     devServer: {
         port: process.env.PORT,
         overlay: true,
         open: true,
-        hot: true
+        hot: true,
     },
     plugins: [
         new CleanWebpackPlugin(),
@@ -66,19 +69,19 @@ module.exports = {
             minify: {
                 collapseWhitespace: isProd,
                 removeComments: isProd,
-            }
+            },
         }),
         new CopyPlugin({
             patterns: [
                 {
                     from: path.resolve(__dirname, 'src/favicon.ico'),
-                    to: path.resolve(__dirname, 'dist')
+                    to: path.resolve(__dirname, 'dist'),
                 },
             ],
         }),
         new MiniCssExtractPlugin({
             filename: filename('css'),
-        })
+        }),
     ],
     module: {
         rules: [
@@ -97,8 +100,8 @@ module.exports = {
                         loader: 'file-loader',
                         options: {
                             outputPath: 'images',
-                            name: '[name]-[sha1:hash:7].[ext]'
-                        }
+                            name: '[name]-[sha1:hash:7].[ext]',
+                        },
                     },
                 ],
             },
@@ -109,8 +112,8 @@ module.exports = {
                         loader: 'file-loader',
                         options: {
                             outputPath: 'svg',
-                            name: '[name]-[sha1:hash:7].[ext]'
-                        }
+                            name: '[name]-[sha1:hash:7].[ext]',
+                        },
                     },
                 ],
             },
@@ -121,16 +124,16 @@ module.exports = {
                         loader: 'file-loader',
                         options: {
                             outputPath: 'fonts',
-                            name: '[name].[ext]'
-                        }
-                    }]
+                            name: '[name].[ext]',
+                        },
+                    }],
             },
             {
                 test: /\.(m?js|jsx)$/,
                 exclude: /(node_modules|bower_components)/,
-                use: getJsLoaders()
-            }
-        ]
-    }
+                use: getJsLoaders(),
+            },
+        ],
+    },
 
-}
+};
