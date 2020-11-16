@@ -3,17 +3,24 @@ const CODES = {
 	Z: 90,
 };
 
-function toCell() {
-	return '<div class="cell" contenteditable></div>';
+function toCell(_, idx) {
+	return `<div class="cell" contenteditable data-col="${idx}"></div>`;
 }
 
-function toColumn(content) {
-	return `<div class="column">${content}</div>`;
+function toColumn(content, idx) {
+	return `<div class="column" data-type="resizable" data-col="${idx}">
+				${content}
+				<div class="col-resize" data-resize="col"></div>				
+			</div>`;
 }
 
 function createRow(content, idx = '') {
-	return `<div class="row">
-                <div class="row-info">${idx}</div>
+	const resize = idx ? '<div class="row-resize" data-resize="row"></div>' : '';
+	return `<div class="row" data-type="resizable">
+                <div class="row-info">
+					${idx}
+					${resize}				
+				</div>
                 <div class="row-data">${content}</div>
             </div>`;
 }
