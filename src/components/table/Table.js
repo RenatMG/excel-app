@@ -74,10 +74,9 @@ export class Table extends ExcelComponent {
 		if (keys.includes(key) && !event.shiftKey) {
 			event.preventDefault();
 			const id = this.selector.current.id(true);
-			const $next = this.$root.find(nextSelector(key, id));
+			const $next = $(this.$root.find(nextSelector(key, id)));
 			if ($next) {
-				this.selector.select($($next));
-				this.$emit('table:select', $($next));
+				this.selectCell();
 			}
 		}
 	}

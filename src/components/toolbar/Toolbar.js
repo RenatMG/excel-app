@@ -31,6 +31,4 @@ export class Toolbar extends ExcelComponent {
                 <span class="material-icons">format_underlined</span>
             </div>`;
 	}
-
-
 }
