@@ -1,7 +1,9 @@
 import {ExcelComponent} from '@core/ExcelComponent';
 import {changeTitle} from '@/redux/actions';
 import {DEFAULT_TITLE} from '@/constants';
-import {debounce} from '@core/utils';
+import {debounce, storage} from '@core/utils';
+import {$} from '@core/dom';
+import {ActiveRoute} from '@core/routes/ActiveRoute';
 
 export class Header extends ExcelComponent {
 	static className = 'excel__header';
@@ -9,7 +11,7 @@ export class Header extends ExcelComponent {
 	constructor($root, options) {
 		super($root, {
 			name: 'Header',
-			listeners: ['input'],
+			listeners: ['input', 'click'],
 			...options,
 		});
 	}
@@ -27,14 +29,25 @@ export class Header extends ExcelComponent {
 		this.$dispatch(changeTitle(evt.target.value));
 	}
 
+	onClick(evt) {
+		const $target = $(evt.target);
+		if ($target.data.type === 'delete') {
+			const decision = window.confirm('Are you sure?');
+			if (decision) {
+				storage(`excel:${ActiveRoute.param}`, null, true);
+			}
+		}
+		ActiveRoute.navigate();
+	}
+
 	toHTML() {
 		return `<input type="text" class="input" value="${this.getTitle()}" />
             <div>
-                <div class="button">
-                    <span class="material-icons">delete</span>
+                <div class="button" data-type="delete">
+                    <span class="material-icons" data-type="delete">delete</span>
                 </div>
-                <div class="button">
-                    <span class="material-icons">exit_to_app</span>
+                <div class="button" data-type="exit">
+                    <span class="material-icons" data-type="exit">exit_to_app</span>
                 </div>
             </div>`;
 	}

@@ -15,6 +15,7 @@ rules: {
   no-plusplus: ["error", { allowForLoopAfterthoughts: true }],
   no-tabs: off,
   no-useless-constructor: off,
-  no-eval: off
+  no-eval: off,
+  no-alert: off
 }
 parser: "babel-eslint"

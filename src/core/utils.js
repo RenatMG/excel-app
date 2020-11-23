@@ -7,8 +7,11 @@ export function capitalize(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function storage(key, data) {
+export function storage(key, data, remove = false) {
 	if (!data) {
+		if (remove) {
+			localStorage.removeItem(key);
+		}
 		return JSON.parse(localStorage.getItem(key));
 	}
 	localStorage.setItem(key, JSON.stringify(data));
@@ -50,4 +53,8 @@ export function setCursorToEnd($el) {
 	r.collapse(false);
 	s.removeAllRanges();
 	s.addRange(r);
+}
+
+export function clone(obj) {
+	return JSON.parse(JSON.stringify(obj));
 }
