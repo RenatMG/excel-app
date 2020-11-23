@@ -3,8 +3,7 @@ import {Emitter} from '@core/Emitter';
 import {StoreSubscriber} from '@core/StoreSubscriber';
 
 export class Excel {
-	constructor(selector, options) {
-		this.$el = $(selector);
+	constructor(options) {
 		this.components = options.components || [];
 		this.store = options.store;
 		// подключение класса слушателя
@@ -36,8 +35,7 @@ export class Excel {
 		return $root;
 	}
 
-	render() {
-		this.$el.append(this.getRoot());
+	init() {
 		this.subscriber.subscribeComponents(this.components);
 		// каждый компонент проходит инициализацию, в которой добавляются слушатели и события
 		this.components.forEach((component) => component.init());

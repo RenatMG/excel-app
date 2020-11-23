@@ -6,3 +6,4 @@ export const DEFAULT_STYLES = {
 };
 
 export const DEFAULT_TITLE = 'Новая таблица';
+export const DASHBOARD_HEADING = 'Excel Dashboard';

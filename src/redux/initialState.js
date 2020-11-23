@@ -1,5 +1,5 @@
-import {storage} from '@core/utils';
 import {DEFAULT_STYLES, DEFAULT_TITLE} from '@/constants';
+import {clone} from '@core/utils';
 
 const defaultState = {
 	colState: {},
@@ -11,6 +11,12 @@ const defaultState = {
 	currentCell: '',
 	currentStyles: {...DEFAULT_STYLES},
 };
+const normalize = (state) => ({
+	...state,
+	currentStyles: DEFAULT_STYLES,
+	currentText: '',
+});
 
-const localStorageState = storage('excel-state');
-export const initialState = localStorageState || defaultState;
+export function normalizeInitialState(state) {
+	return state ? normalize(state) : clone(defaultState);
+}
