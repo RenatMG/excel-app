@@ -11,32 +11,13 @@ const isDev = process.env.NODE_ENV === 'development';
 const filename = (ext) => (isDev ? `[name].bundle.${ext}` : `[name].[hash:7].bundle.${ext}`);
 const getStyleLoaders = () => [isProd ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'];
 const getJsLoaders = () => {
-	const loaders = [
-		{
-			loader: 'babel-loader',
-			options: {
-				presets: [[
-					'@babel/env', {
-						corejs: 3,
-						useBuiltIns: 'usage',
-						debug: false,
-						modules: false,
-						targets: 'last 1 version, >1%',
-					}],
-					'@babel/react',
-				],
-				plugins: [
-					'@babel/plugin-proposal-class-properties',
-				],
-			},
-		},
-	];
+	const loaders = ['babel-loader'];
 	if (isDev) {
 		loaders.push('eslint-loader');
 	}
 
 	return loaders;
-}
+};
 console.log('MODE:', process.env.NODE_ENV);
 console.log('PORT:', process.env.PORT);
 

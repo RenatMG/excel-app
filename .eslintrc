@@ -1,6 +1,7 @@
 env:
   browser: true
   es2020: true
+  jest: true
 extends: "airbnb-base"
 parserOptions:
   ecmaVersion: 2020
@@ -16,6 +17,15 @@ rules: {
   no-tabs: off,
   no-useless-constructor: off,
   no-eval: off,
-  no-alert: off
+  no-alert: off,
+  arrow-body-style: off,
+  max-classes-per-file: off,
+  import/no-useless-path-segments: off,
+  jest/no-disabled-tests: "warn",
+  jest/no-focused-tests: "error",
+  jest/no-identical-title: "error",
+  jest/prefer-to-have-length: "warn",
+  jest/valid-expect: "error"
 }
 parser: "babel-eslint"
+plugins: ["jest"]
