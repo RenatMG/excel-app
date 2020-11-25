@@ -1,4 +1,3 @@
-import {Page} from '@core/Page';
 import {createStore} from '@core/store/createStore';
 import {debounce, storage} from '@core/utils';
 import {Excel} from '@/components/excel/Excel';
@@ -8,6 +7,7 @@ import {Formula} from '@/components/formula/Formula';
 import {Table} from '@/components/table/Table';
 import {rootReducer} from '@/redux/rootReducer';
 import {normalizeInitialState} from '@/redux/initialState';
+import {Page} from '@core/page/Page';
 
 function storageName(param) {
 	return `excel:${param}`;

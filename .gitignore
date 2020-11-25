@@ -6,3 +6,6 @@ dist
 git.txt
 npm.txt
 package-lock.json
+firebase.json
+.firebaserc
+.firebase

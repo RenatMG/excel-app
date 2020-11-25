@@ -1,7 +1,7 @@
-import {Page} from '@core/Page';
 import {$} from '@core/dom';
-import {createRecords} from '@/pages/dashboard.functions';
 import {DASHBOARD_HEADING, DEFAULT_TITLE} from '@/constants';
+import {Page} from '@core/page/Page';
+import {createRecords} from '@/shared/dashboard.functions';
 
 export class DashboardPage extends Page {
 	constructor() {
