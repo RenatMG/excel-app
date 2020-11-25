@@ -1,9 +1,9 @@
 module.exports = {
   presets: [[
     '@babel/env', {
-      // corejs: 3,
-      // useBuiltIns: 'usage',
-      // debug: false,
+      corejs: 3,
+      useBuiltIns: 'usage',
+      debug: false,
       // modules: false,
       targets: [{node: 'current'}, 'last 1 version, >1%'],
     }],

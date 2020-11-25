@@ -1,5 +1,6 @@
 import {$} from '../dom';
 import {ActiveRoute} from '../routes/ActiveRoute';
+import {Loader} from '../../components/loader/Loader';
 
 export class Router {
 	constructor(selector, routes) {
@@ -10,6 +11,7 @@ export class Router {
 		this.$placeholder = $(selector);
 		this.changePageHandler = this.changePageHandler.bind(this);
 		this.page = null;
+		this.loader = new Loader();
 	}
 
 	init() {
@@ -21,7 +23,10 @@ export class Router {
 		window.removeEventListener('hashchange', this.changePageHandler);
 	}
 
-	changePageHandler() {
+	async changePageHandler() {
+		this.$placeholder
+			.clear()
+			.append(this.loader);
 		if (this.page) {
 			this.page.destroy();
 		}
@@ -29,9 +34,11 @@ export class Router {
 			? this.routes.excel
 			: this.routes.dashboard;
 		this.page = new Page(ActiveRoute.param);
+		const pageRoot = await this.page.getRoot();
 		this.$placeholder
 			.clear()
-			.append(this.page.getRoot());
+			.append(pageRoot);
+
 		this.page.afterRender();
 	}
 }
